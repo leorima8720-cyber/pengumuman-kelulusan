@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengumuman Kelulusan - SMAN 2 Seram Bagian Barat</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Playfair+Display:wght@700;800&amp;display=swap" rel="stylesheet">
+  <style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Plus Jakarta Sans',sans-serif}
+.grad-bg{background:linear-gradient(135deg,#0f172a 0%,#1e293b 40%,#0c4a6e 100%)}
+.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1)}
+.glass-light{background:rgba(255,255,255,0.95);backdrop-filter:blur(16px)}
+.float-particle{position:absolute;border-radius:50%;opacity:0.08;animation:floatUp 12s infinite ease-in-out}
+@keyframes floatUp{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.1)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes confetti-fall{0%{transform:translateY(-100%) rotate(0deg);opacity:1}100%{transform:translateY(100%) rotate(720deg);opacity:0}}
+.fade-in-up{animation:fadeInUp 0.6s ease forwards}
+.slide-down{animation:slideDown 0.5s ease forwards}
+.pop-in{animation:popIn 0.4s ease forwards}
+.shimmer-btn{background:linear-gradient(90deg,#2563eb,#7c3aed,#2563eb);background-size:200% 100%;animation:shimmer 3s linear infinite}
+.confetti-piece{position:fixed;width:10px;height:10px;top:-10px;animation:confetti-fall 3s ease-in forwards;z-index:100;pointer-events:none}
+input:focus{outline:none;box-shadow:0 0 0 3px rgba(59,130,246,0.3)}
+.login-card{transition:all 0.3s ease}
+.login-card:hover{transform:translateY(-2px)}
+.result-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:9999px;font-weight:700;font-size:14px}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;padding:12px 24px;border-radius:12px;font-weight:600;animation:slideDown 0.3s ease forwards}
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto grad-bg relative">
+   <!-- Particles -->
+   <div class="float-particle" style="width:200px;height:200px;background:#3b82f6;top:10%;left:5%;animation-delay:0s"></div>
+   <div class="float-particle" style="width:150px;height:150px;background:#7c3aed;top:60%;right:10%;animation-delay:2s"></div>
+   <div class="float-particle" style="width:100px;height:100px;background:#06b6d4;bottom:20%;left:30%;animation-delay:4s"></div><!-- Toast -->
+   <div id="toast" class="toast hidden bg-red-500 text-white"></div><!-- Confetti container -->
+   <div id="confetti-container"></div><!-- LOGIN PAGE -->
+   <div id="login-page" class="relative z-10 flex items-center justify-center min-h-full px-4 py-8">
+    <div class="w-full max-w-md">
+     <div class="login-card glass rounded-3xl p-8 md:p-10 fade-in-up">
+      <!-- Logo -->
+      <div class="flex justify-center mb-6">
+       <div id="logo-container" class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/30">
+        <img src="https://lh3.googleusercontent.com/d/19KRomRK41h3M0r46PO4TmxyenDOyDH6u" alt="Logo SMAN 2 SBB" class="w-20 h-20 rounded-full object-cover" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<svg width=48 height=48 viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'white\' stroke-width=\'1.5\'><path d=\'M4 19.5A2.5 2.5 0 0 1 6.5 17H20\'/><path d=\'M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z\'/><path d=\'M12 6v7l3-2 3 2V6\'/></svg>'">
+       </div>
+      </div>
+      <h1 id="el-school-name" class="text-center text-white font-extrabold text-xl md:text-2xl mb-1" style="font-family:'Playfair Display',serif">SMA Negeri 2 Seram Bagian Barat</h1>
+      <p class="text-center text-blue-300 font-semibold text-sm mb-1">PENGUMUMAN KELULUSAN</p>
+      <p id="el-year" class="text-center text-slate-400 text-xs mb-6">Tahun Ajaran 2025/2026</p>
+      <p id="el-welcome" class="text-center text-slate-300 text-sm mb-8">Selamat datang di portal pengumuman kelulusan. Silakan masukkan NISN Anda untuk melihat hasil.</p>
+      <form id="login-form" onsubmit="handleLogin(event)">
+       <label for="nisn-input" class="block text-slate-300 text-sm font-semibold mb-2">Nomor Induk Siswa Nasional (NISN)</label>
+       <div class="relative mb-4">
+        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" style="width:18px;height:18px"></i> <input id="nisn-input" type="text" inputmode="numeric" placeholder="Masukkan NISN Anda" class="w-full pl-12 pr-4 py-3.5 rounded-xl bg-white/10 border border-white/10 text-white placeholder-slate-500 text-sm font-medium transition-all" required>
+       </div><button type="submit" id="login-btn" class="w-full py-3.5 rounded-xl shimmer-btn text-white font-bold text-sm tracking-wide transition-all hover:opacity-90 flex items-center justify-center gap-2"> <span id="login-btn-text">Cek Kelulusan</span> <i data-lucide="arrow-right" style="width:18px;height:18px"></i> </button>
+      </form>
+      <p class="text-center text-slate-500 text-xs mt-6">Data bersumber dari database resmi sekolah</p>
+     </div>
+    </div>
+   </div><!-- RESULT PAGE -->
+   <div id="result-page" class="relative z-10 hidden min-h-full px-4 py-8 flex items-center justify-center">
+    <div class="w-full max-w-lg">
+     <div class="glass rounded-3xl overflow-hidden fade-in-up">
+      <!-- Header -->
+      <div id="result-header" class="p-6 text-center">
+       <div id="result-icon" class="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 pop-in"></div>
+       <h2 id="result-status" class="text-white text-2xl font-extrabold mb-1" style="font-family:'Playfair Display',serif"></h2>
+       <p id="result-subtitle" class="text-sm font-medium"></p>
+      </div><!-- Student Info -->
+      <div class="px-6 pb-6 space-y-3">
+       <div class="bg-white/5 rounded-2xl p-5 space-y-4">
+        <div class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="user" class="text-blue-400" style="width:16px;height:16px"></i>
+         </div>
+         <div>
+          <p class="text-slate-400 text-xs font-medium">Nama Lengkap</p>
+          <p id="res-nama" class="text-white font-bold text-sm"></p>
+         </div>
+        </div>
+        <div class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="hash" class="text-purple-400" style="width:16px;height:16px"></i>
+         </div>
+         <div>
+          <p class="text-slate-400 text-xs font-medium">NISN</p>
+          <p id="res-nisn" class="text-white font-bold text-sm"></p>
+         </div>
+        </div>
+        <div class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="calendar" class="text-cyan-400" style="width:16px;height:16px"></i>
+         </div>
+         <div>
+          <p class="text-slate-400 text-xs font-medium">Tempat, Tanggal Lahir</p>
+          <p id="res-ttl" class="text-white font-bold text-sm"></p>
+         </div>
+        </div>
+        <div class="flex items-start gap-3">
+         <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="award" class="text-emerald-400" style="width:16px;height:16px"></i>
+         </div>
+         <div>
+          <p class="text-slate-400 text-xs font-medium">Status Kelulusan</p>
+          <div id="res-badge"></div>
+         </div>
+        </div>
+       </div><!-- Download SKL -->
+       <div id="skl-section" class="hidden">
+        <a id="skl-link" href="#" target="_blank" rel="noopener noreferrer" class="block w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm text-center transition-all flex items-center justify-center gap-2"> <i data-lucide="download" style="width:18px;height:18px"></i> <span>Download Surat Keterangan Lulus (SKL)</span> </a>
+       </div><button onclick="handleLogout()" class="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-semibold text-sm transition-all flex items-center justify-center gap-2"> <i data-lucide="arrow-left" style="width:16px;height:16px"></i> Kembali </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Loading overlay -->
+   <div id="loading-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="glass rounded-2xl p-8 flex flex-col items-center gap-4">
+     <div class="w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+     <p class="text-white font-semibold text-sm">Memuat data...</p>
+    </div>
+   </div>
+  </div>
+  <script>
+let studentsData = [];
+let dataLoaded = false;
+
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTUvQB8KEdQU89iXy3flfzsxcIuxBKAbcl9tyGvLVER8sNkdvcSJzkBuJ6KCWqTPTTQ10y8PBn0imyP/pub?output=csv';
+
+const defaultConfig = {
+  school_name: 'SMA Negeri 2 Seram Bagian Barat',
+  announcement_year: '2025/2026',
+  welcome_text: 'Selamat datang di portal pengumuman kelulusan. Silakan masukkan NISN Anda untuk melihat hasil.',
+  background_color: '#0f172a',
+  surface_color: '#1e293b',
+  text_color: '#e2e8f0',
+  primary_action_color: '#2563eb',
+  secondary_action_color: '#7c3aed',
+  font_family: 'Plus Jakarta Sans',
+  font_size: 14
+};
+
+function applyConfig(config) {
+  const el = (id) => document.getElementById(id);
+  const c = (k) => config[k] || defaultConfig[k];
+
+  el('el-school-name').textContent = c('school_name');
+  el('el-year').textContent = 'Tahun Ajaran ' + c('announcement_year');
+  el('el-welcome').textContent = c('welcome_text');
+
+  const font = c('font_family');
+  const baseStack = font + ', sans-serif';
+  document.body.style.fontFamily = baseStack;
+
+  const fs = c('font_size');
+  document.body.style.fontSize = fs + 'px';
+  el('el-school-name').style.fontSize = (fs * 1.6) + 'px';
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => applyConfig(config),
+  mapToCapabilities: (config) => {
+    const c = (k) => config[k] || defaultConfig[k];
+    const mut = (key) => ({
+      get: () => c(key),
+      set: (v) => { config[key] = v; window.elementSdk.setConfig({ [key]: v }); }
+    });
+    return {
+      recolorables: [mut('background_color'), mut('surface_color'), mut('text_color'), mut('primary_action_color'), mut('secondary_action_color')],
+      borderables: [],
+      fontEditable: mut('font_family'),
+      fontSizeable: mut('font_size')
+    };
+  },
+  mapToEditPanelValues: (config) => new Map([
+    ['school_name', config.school_name || defaultConfig.school_name],
+    ['announcement_year', config.announcement_year || defaultConfig.announcement_year],
+    ['welcome_text', config.welcome_text || defaultConfig.welcome_text]
+  ])
+});
+
+function parseCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const results = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    if (cols.length >= 7) {
+      const nisn = (cols[3] || '').trim();
+      if (nisn) {
+        results.push({
+          nama: (cols[2] || '').trim(),
+          nisn: nisn,
+          ttl: (cols[4] || '').trim(),
+          status: (cols[5] || '').trim().toUpperCase(),
+          skl: (cols[6] || '').trim()
+        });
+      }
+    }
+  }
+  return results;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"' && line[i+1] === '"') { current += '"'; i++; }
+      else if (ch === '"') { inQuotes = false; }
+      else { current += ch; }
+    } else {
+      if (ch === '"') { inQuotes = true; }
+      else if (ch === ',') { result.push(current); current = ''; }
+      else { current += ch; }
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+async function fetchData() {
+  if (dataLoaded) return;
+  document.getElementById('loading-overlay').classList.remove('hidden');
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('Gagal memuat data');
+    const text = await res.text();
+    studentsData = parseCSV(text);
+    dataLoaded = true;
+  } catch (e) {
+    showToast('Gagal memuat data. Periksa koneksi internet Anda.');
+  } finally {
+    document.getElementById('loading-overlay').classList.add('hidden');
+  }
+}
+
+function showToast(msg, type = 'error') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type === 'error' ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white');
+  t.classList.remove('hidden');
+  setTimeout(() => t.classList.add('hidden'), 3500);
+}
+
+function spawnConfetti() {
+  const container = document.getElementById('confetti-container');
+  const colors = ['#2563eb','#7c3aed','#06b6d4','#10b981','#f59e0b','#ef4444','#ec4899'];
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 2 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    piece.style.width = (6 + Math.random() * 8) + 'px';
+    piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+  }
+  setTimeout(() => container.innerHTML = '', 5000);
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const nisn = document.getElementById('nisn-input').value.trim();
+  if (!nisn) { showToast('Silakan masukkan NISN Anda'); return; }
+
+  await fetchData();
+  if (!dataLoaded) return;
+
+  const student = studentsData.find(s => s.nisn === nisn);
+  if (!student) { showToast('NISN tidak ditemukan. Pastikan NISN Anda benar.'); return; }
+
+  showResult(student);
+}
+
+function showResult(s) {
+  const isLulus = s.status === 'LULUS';
+
+  document.getElementById('login-page').classList.add('hidden');
+  document.getElementById('result-page').classList.remove('hidden');
+
+  const icon = document.getElementById('result-icon');
+  const status = document.getElementById('result-status');
+  const subtitle = document.getElementById('result-subtitle');
+
+  if (isLulus) {
+    icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 pop-in bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/30';
+    icon.innerHTML = '<i data-lucide="check-circle" class="text-white" style="width:40px;height:40px"></i>';
+    status.textContent = 'SELAMAT! ANDA LULUS!';
+    status.style.color = '#34d399';
+    subtitle.textContent = 'Anda dinyatakan LULUS dari ' + (window.elementSdk.config.school_name || defaultConfig.school_name);
+    subtitle.style.color = '#6ee7b7';
+    spawnConfetti();
+  } else {
+    icon.className = 'w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 pop-in bg-gradient-to-br from-amber-400 to-amber-600 shadow-lg shadow-amber-500/30';
+    icon.innerHTML = '<i data-lucide="info" class="text-white" style="width:40px;height:40px"></i>';
+    status.textContent = 'BELUM LULUS';
+    status.style.color = '#fbbf24';
+    subtitle.textContent = 'Silakan hubungi pihak sekolah untuk informasi lebih lanjut.';
+    subtitle.style.color = '#fcd34d';
+  }
+
+  document.getElementById('res-nama').textContent = s.nama;
+  document.getElementById('res-nisn').textContent = s.nisn;
+  document.getElementById('res-ttl').textContent = s.ttl;
+
+  const badge = document.getElementById('res-badge');
+  badge.innerHTML = isLulus
+    ? '<span class="result-badge bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"><i data-lucide="check" style="width:14px;height:14px"></i> LULUS</span>'
+    : '<span class="result-badge bg-amber-500/20 text-amber-400 border border-amber-500/30"><i data-lucide="x" style="width:14px;height:14px"></i> BELUM LULUS</span>';
+
+  const sklSection = document.getElementById('skl-section');
+  if (isLulus && s.skl) {
+    sklSection.classList.remove('hidden');
+    document.getElementById('skl-link').href = s.skl;
+  } else {
+    sklSection.classList.add('hidden');
+  }
+
+  lucide.createIcons();
+}
+
+function handleLogout() {
+  document.getElementById('result-page').classList.add('hidden');
+  document.getElementById('login-page').classList.remove('hidden');
+  document.getElementById('nisn-input').value = '';
+}
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f6014f906f60fad',t:'MTc3NzgxOTg2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
